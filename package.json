@@ -34,7 +34,7 @@
     "dist"
   ],
   "dependencies": {
-    "@antfu/shiki": "^0.6.0",
+    "@antfu/shiki": "^0.6.1",
     "deasync": "^0.1.21",
     "debug": "^4.3.1"
   },
