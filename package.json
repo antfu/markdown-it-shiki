@@ -1,6 +1,6 @@
 {
   "name": "markdown-it-shiki",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Markdown It plugin for Shiki",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
