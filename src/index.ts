@@ -23,9 +23,7 @@ function getThemeName(theme: IThemeRegistration) {
   return (theme as IShikiTheme).name
 }
 
-const MarkdownItShiki: MarkdownIt.PluginWithOptions<Options> = (markdownit, options = {}) => {
-  let _highlighter: Highlighter = options.highlighter!
-
+export function resolveOptions(options: Options) {
   const themes: IThemeRegistration[] = []
   let darkModeThemes: DarkModeThemes | undefined
 
@@ -46,10 +44,27 @@ const MarkdownItShiki: MarkdownIt.PluginWithOptions<Options> = (markdownit, opti
     }
   }
 
+  return {
+    ...options,
+    themes,
+    darkModeThemes: darkModeThemes
+      ? {
+        dark: getThemeName(darkModeThemes.dark),
+        light: getThemeName(darkModeThemes.light),
+      }
+      : undefined,
+  }
+}
+
+const MarkdownItShiki: MarkdownIt.PluginWithOptions<Options> = (markdownit, options = {}) => {
+  let _highlighter: Highlighter = options.highlighter!
+
   const {
     timeout = 10_000,
     langs,
-  } = options
+    themes,
+    darkModeThemes,
+  } = resolveOptions(options)
 
   if (!_highlighter) {
     getHighlighter({ themes, langs })
@@ -73,9 +88,13 @@ const MarkdownItShiki: MarkdownIt.PluginWithOptions<Options> = (markdownit, opti
     }
 
     if (darkModeThemes) {
-      const dark = _highlighter.codeToHtml(code, lang || 'text', getThemeName(darkModeThemes.dark))
-      const light = _highlighter.codeToHtml(code, lang || 'text', getThemeName(darkModeThemes.light))
-      return `<div class="shiki-container">${dark.replace('<pre class="shiki"', '<pre class="shiki shiki-dark"')}${light.replace('<pre class="shiki"', '<pre class="shiki shiki-light"')}</div>`
+      const dark = _highlighter
+        .codeToHtml(code, lang || 'text', darkModeThemes.dark)
+        .replace('<pre class="shiki"', '<pre class="shiki shiki-dark"')
+      const light = _highlighter
+        .codeToHtml(code, lang || 'text', darkModeThemes.light)
+        .replace('<pre class="shiki"', '<pre class="shiki shiki-light"')
+      return `<div class="shiki-container">${dark}${light}</div>`
     }
     else {
       return _highlighter.codeToHtml(code, lang || 'text')
