@@ -1,4 +1,4 @@
-import { getHighlighter, Highlighter, ILanguageRegistration, IThemeRegistration, Theme } from 'shiki'
+import { getHighlighter, Highlighter, ILanguageRegistration, IShikiTheme, IThemeRegistration } from 'shiki'
 import type MarkdownIt from 'markdown-it'
 import deasync from 'deasync'
 import Debug from 'debug'
@@ -6,14 +6,20 @@ import Debug from 'debug'
 const debug = Debug('markdown-it-shiki')
 
 export interface DarkModeThemes {
-  dark: Theme
-  light: Theme
+  dark: IThemeRegistration
+  light: IThemeRegistration
 }
 
 export interface Options {
-  theme?: Theme | DarkModeThemes
+  theme?: IThemeRegistration | DarkModeThemes
   langs?: ILanguageRegistration[]
   timeout?: number
+}
+
+function getThemeName(theme: IThemeRegistration) {
+  if (typeof theme === 'string')
+    return theme
+  return (theme as IShikiTheme).name
 }
 
 const MarkdownItShiki: MarkdownIt.PluginWithOptions<Options> = (markdownit, options = {}) => {
@@ -29,9 +35,14 @@ const MarkdownItShiki: MarkdownIt.PluginWithOptions<Options> = (markdownit, opti
     themes.push(options.theme)
   }
   else {
-    darkModeThemes = options.theme
-    themes.push(options.theme.dark)
-    themes.push(options.theme.light)
+    if ('dark' in options.theme || 'light' in options.theme) {
+      darkModeThemes = options.theme
+      themes.push(options.theme.dark)
+      themes.push(options.theme.light)
+    }
+    else {
+      themes.push(options.theme)
+    }
   }
 
   const {
@@ -59,8 +70,8 @@ const MarkdownItShiki: MarkdownIt.PluginWithOptions<Options> = (markdownit, opti
     }
 
     if (darkModeThemes) {
-      const dark = _highlighter.codeToHtml(code, lang || 'text', darkModeThemes.dark)
-      const light = _highlighter.codeToHtml(code, lang || 'text', darkModeThemes.light)
+      const dark = _highlighter.codeToHtml(code, lang || 'text', getThemeName(darkModeThemes.dark))
+      const light = _highlighter.codeToHtml(code, lang || 'text', getThemeName(darkModeThemes.light))
       return dark.replace('<pre class="shiki"', '<pre class="shiki shiki-dark"') + light.replace('<pre class="shiki"', '<pre class="shiki shiki-light"')
     }
     else {
