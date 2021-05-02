@@ -2,8 +2,6 @@
 
 [Markdown It](https://markdown-it.github.io/) plugin for [Shiki](https://github.com/shikijs/shiki)
 
-> Note currently this plugin uses my fork [@antfu/shiki](https://github.com/antfu/shiki/tree/feat/isomorphic), a WIP implementation of [this RFC](https://github.com/shikijs/shiki/issues/91). Will switch back to the official version once the implementation gets merged and shipped.
-
 ## Install 
 
 ```bash

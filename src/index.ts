@@ -1,4 +1,4 @@
-import { getHighlighter, Highlighter, ILanguageRegistration, IThemeRegistration, Theme } from '@antfu/shiki'
+import { getHighlighter, Highlighter, ILanguageRegistration, IThemeRegistration, Theme } from 'shiki'
 import type MarkdownIt from 'markdown-it'
 import deasync from 'deasync'
 import Debug from 'debug'
@@ -49,16 +49,14 @@ const MarkdownItShiki: MarkdownIt.PluginWithOptions<Options> = (markdownit, opti
       debug('awaiting getHighlighter()')
       let count = timeout / 200
       // eslint-disable-next-line no-unmodified-loop-condition
-      while (!_highlighter) { 
+      while (!_highlighter) {
         deasync.sleep(200)
         count -= 1
-        if (count <= 0) {
-          throw new Error('Shiki.getHighlighter() never gets resolved' )
-        }
+        if (count <= 0)
+          throw new Error('Shiki.getHighlighter() never gets resolved')
       }
       debug('getHighlighter() resolved')
     }
-   
 
     if (darkModeThemes) {
       const dark = _highlighter.codeToHtml(code, lang || 'text', darkModeThemes.dark)
