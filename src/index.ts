@@ -14,6 +14,7 @@ export interface Options {
   theme?: IThemeRegistration | DarkModeThemes
   langs?: ILanguageRegistration[]
   timeout?: number
+  highlighter?: Highlighter
 }
 
 function getThemeName(theme: IThemeRegistration) {
@@ -23,7 +24,7 @@ function getThemeName(theme: IThemeRegistration) {
 }
 
 const MarkdownItShiki: MarkdownIt.PluginWithOptions<Options> = (markdownit, options = {}) => {
-  let _highlighter: Highlighter = undefined!
+  let _highlighter: Highlighter = options.highlighter!
 
   const themes: IThemeRegistration[] = []
   let darkModeThemes: DarkModeThemes | undefined
@@ -50,10 +51,12 @@ const MarkdownItShiki: MarkdownIt.PluginWithOptions<Options> = (markdownit, opti
     langs,
   } = options
 
-  getHighlighter({ themes, langs })
-    .then((h) => {
-      _highlighter = h
-    })
+  if (!_highlighter) {
+    getHighlighter({ themes, langs })
+      .then((h) => {
+        _highlighter = h
+      })
+  }
 
   markdownit.options.highlight = (code, lang) => {
     if (!_highlighter) {
