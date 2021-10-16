@@ -1,9 +1,6 @@
-import { getHighlighter, Highlighter, ILanguageRegistration, IShikiTheme, IThemeRegistration } from 'shiki'
+import { Highlighter, ILanguageRegistration, IShikiTheme, IThemeRegistration } from 'shiki'
 import type MarkdownIt from 'markdown-it'
-import deasync from 'deasync'
-import Debug from 'debug'
-
-const debug = Debug('markdown-it-shiki')
+import { createSyncFn } from 'synckit'
 
 export interface DarkModeThemes {
   dark: IThemeRegistration
@@ -56,48 +53,43 @@ export function resolveOptions(options: Options) {
   }
 }
 
+const syncRun = createSyncFn(require.resolve('./worker'))
+
 const MarkdownItShiki: MarkdownIt.PluginWithOptions<Options> = (markdownit, options = {}) => {
-  let _highlighter: Highlighter = options.highlighter!
+  const _highlighter: Highlighter = options.highlighter!
 
   const {
-    timeout = 10_000,
     langs,
     themes,
     darkModeThemes,
   } = resolveOptions(options)
 
-  if (!_highlighter) {
-    getHighlighter({ themes, langs })
-      .then((h) => {
-        _highlighter = h
-      })
+  if (!_highlighter)
+    syncRun('getHighlighter', { langs, themes })
+
+  const highlightCode = (code: string, lang: string, theme?: string): string => {
+    if (_highlighter) {
+      return _highlighter
+        .codeToHtml(code, lang || 'text', theme)
+    }
+
+    return syncRun('codeToHtml', {
+      code,
+      theme,
+      lang: lang || 'text',
+    })
   }
 
   markdownit.options.highlight = (code, lang) => {
-    if (!_highlighter) {
-      debug('awaiting getHighlighter()')
-      let count = timeout / 200
-      // eslint-disable-next-line no-unmodified-loop-condition
-      while (!_highlighter) {
-        deasync.sleep(200)
-        count -= 1
-        if (count <= 0)
-          throw new Error('Shiki.getHighlighter() never gets resolved')
-      }
-      debug('getHighlighter() resolved')
-    }
-
     if (darkModeThemes) {
-      const dark = _highlighter
-        .codeToHtml(code, lang || 'text', darkModeThemes.dark)
+      const dark = highlightCode(code, lang, darkModeThemes.dark)
         .replace('<pre class="shiki"', '<pre class="shiki shiki-dark"')
-      const light = _highlighter
-        .codeToHtml(code, lang || 'text', darkModeThemes.light)
+      const light = highlightCode(code, lang || 'text', darkModeThemes.light)
         .replace('<pre class="shiki"', '<pre class="shiki shiki-light"')
       return `<div class="shiki-container">${dark}${light}</div>`
     }
     else {
-      return _highlighter.codeToHtml(code, lang || 'text')
+      return highlightCode(code, lang || 'text')
     }
   }
 }
