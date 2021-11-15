@@ -1,6 +1,6 @@
 {
   "name": "markdown-it-shiki",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "Markdown It plugin for Shiki",
   "keywords": [
     "markdown-it",
