@@ -54,7 +54,7 @@ export function resolveOptions(options: Options) {
   }
 }
 
-const require = createRequire(import.meta.url);
+const require = createRequire(import.meta.url)
 const syncRun = createSyncFn(require.resolve('./worker'))
 
 const MarkdownItShiki: MarkdownIt.PluginWithOptions<Options> = (markdownit, options = {}) => {
