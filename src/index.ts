@@ -1,3 +1,4 @@
+import { createRequire } from 'module'
 import { Highlighter, ILanguageRegistration, IShikiTheme, IThemeRegistration } from 'shiki'
 import type MarkdownIt from 'markdown-it'
 import { createSyncFn } from 'synckit'
@@ -53,6 +54,7 @@ export function resolveOptions(options: Options) {
   }
 }
 
+const require = createRequire(import.meta.url)
 const syncRun = createSyncFn(require.resolve('./worker'))
 
 const MarkdownItShiki: MarkdownIt.PluginWithOptions<Options> = (markdownit, options = {}) => {
