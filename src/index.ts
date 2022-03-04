@@ -1,5 +1,5 @@
 import { createRequire } from 'module'
-import { Highlighter, ILanguageRegistration, IShikiTheme, IThemeRegistration } from 'shiki'
+import type { Highlighter, ILanguageRegistration, IShikiTheme, IThemeRegistration } from 'shiki'
 import type MarkdownIt from 'markdown-it'
 import { createSyncFn } from 'synckit'
 

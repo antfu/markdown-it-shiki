@@ -1,4 +1,5 @@
-import { getHighlighter, IThemeRegistration, ILanguageRegistration, Highlighter } from 'shiki'
+import type { Highlighter, ILanguageRegistration, IThemeRegistration } from 'shiki'
+import { getHighlighter } from 'shiki'
 import { runAsWorker } from 'synckit'
 
 let h: Highlighter
