@@ -47,18 +47,15 @@ export function resolveOptions(options: Options) {
     themes,
     darkModeThemes: darkModeThemes
       ? {
-        dark: getThemeName(darkModeThemes.dark),
-        light: getThemeName(darkModeThemes.light),
-      }
+          dark: getThemeName(darkModeThemes.dark),
+          light: getThemeName(darkModeThemes.light),
+        }
       : undefined,
   }
 }
 
-const require = createRequire(import.meta.url)
-const syncRun = createSyncFn(require.resolve('./worker'))
-
 const MarkdownItShiki: MarkdownIt.PluginWithOptions<Options> = (markdownit, options = {}) => {
-  const _highlighter: Highlighter = options.highlighter!
+  const _highlighter = options.highlighter
 
   const {
     langs,
@@ -66,14 +63,16 @@ const MarkdownItShiki: MarkdownIt.PluginWithOptions<Options> = (markdownit, opti
     darkModeThemes,
   } = resolveOptions(options)
 
-  if (!_highlighter)
+  let syncRun: any
+  if (!_highlighter) {
+    const require = createRequire(import.meta.url)
+    syncRun = createSyncFn(require.resolve('./worker'))
     syncRun('getHighlighter', { langs, themes })
+  }
 
   const highlightCode = (code: string, lang: string, theme?: string): string => {
-    if (_highlighter) {
-      return _highlighter
-        .codeToHtml(code, lang || 'text', theme)
-    }
+    if (_highlighter)
+      return _highlighter.codeToHtml(code, lang || 'text', theme)
 
     return syncRun('codeToHtml', {
       code,
