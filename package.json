@@ -43,7 +43,7 @@
   "dependencies": {
     "debug": "^4.3.4",
     "shiki": "^0.10.1",
-    "synckit": "^0.7.0"
+    "unasync": "^0.1.4"
   },
   "devDependencies": {
     "@antfu/eslint-config-ts": "^0.21.1",
