@@ -72,7 +72,7 @@ const MarkdownItShiki: MarkdownIt.PluginWithOptions<Options> = (markdownit, opti
 
   const highlightCode = (code: string, lang: string, theme?: string): string => {
     if (_highlighter)
-      return _highlighter.codeToHtml(code, lang || 'text', theme)
+      return _highlighter.codeToHtml(code, { lang: lang || 'text', theme })
 
     return syncRun('codeToHtml', {
       code,

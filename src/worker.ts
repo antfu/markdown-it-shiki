@@ -19,7 +19,11 @@ async function handler(command: 'getHighlighter' | 'codeToHtml', options: any) {
   }
   else if (command === 'codeToHtml') {
     const { code, lang, theme } = options
-    return h.codeToHtml(code, lang, theme)
+    const loadedLanguages = h.getLoadedLanguages()
+    if (loadedLanguages.includes(lang))
+      return h.codeToHtml(code, { lang })
+    else
+      return h.codeToHtml(code, { lang: 'text', theme })
   }
 }
 
