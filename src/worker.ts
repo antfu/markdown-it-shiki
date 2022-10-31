@@ -21,7 +21,7 @@ async function handler(command: 'getHighlighter' | 'codeToHtml', options: any) {
     const { code, lang, theme } = options
     const loadedLanguages = h.getLoadedLanguages()
     if (loadedLanguages.includes(lang))
-      return h.codeToHtml(code, { lang })
+      return h.codeToHtml(code, { lang, theme })
     else
       return h.codeToHtml(code, { lang: 'text', theme })
   }
