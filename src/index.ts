@@ -36,9 +36,9 @@ export function resolveOptions(options: Options) {
   }
   else {
     if ('dark' in options.theme || 'light' in options.theme) {
-      darkModeThemes = options.theme
-      themes.push(options.theme.dark)
-      themes.push(options.theme.light)
+      darkModeThemes = options.theme as DarkModeThemes
+      themes.push(darkModeThemes.dark)
+      themes.push(darkModeThemes.light)
     }
     else {
       themes.push(options.theme)
