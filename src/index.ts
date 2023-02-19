@@ -125,7 +125,7 @@ const MarkdownItShiki: MarkdownIt.PluginWithOptions<Options> = (markdownit, opti
       return `<div class="shiki-container">${dark}${light}</div>`
     }
     else {
-      return highlightCode(code, lang || 'text')
+      return highlightCode(code, lang || 'text', null, lineOptions)
     }
   }
 }
