@@ -130,7 +130,7 @@ const MarkdownItShiki: MarkdownIt.PluginWithOptions<Options> = (markdownit, opti
         lang || 'text',
         undefined,
         lineOptions,
-      )
+      ).replace('<code>', `<code class="language-${lang}">`)
     }
   }
 }
