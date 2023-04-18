@@ -1,4 +1,4 @@
-import { createRequire } from 'module'
+import { createRequire } from 'node:module'
 import type { Highlighter, HtmlRendererOptions, ILanguageRegistration, IShikiTheme, IThemeRegistration } from 'shiki'
 import type MarkdownIt from 'markdown-it'
 import { createSyncFn } from 'synckit'
@@ -57,7 +57,7 @@ export function resolveOptions(options: Options) {
   }
 }
 
-const attrsToLines = (attrs: string): HtmlRendererOptions['lineOptions'] => {
+function attrsToLines(attrs: string): HtmlRendererOptions['lineOptions'] {
   const result: number[] = []
   if (!attrs.trim())
     return []
