@@ -110,7 +110,7 @@ const MarkdownItShiki: MarkdownIt.PluginWithOptions<Options> = (markdownit, opti
     })
   }
 
-  markdownit.options.highlight = (code, lang, attrs) => {
+  markdownit.options.highlight = (code, lang = 'text', attrs) => {
     let lineOptions
     if (highlightLines) {
       const match = RE.exec(attrs)
@@ -120,17 +120,17 @@ const MarkdownItShiki: MarkdownIt.PluginWithOptions<Options> = (markdownit, opti
     if (darkModeThemes) {
       const dark = highlightCode(code, lang, darkModeThemes.dark, lineOptions)
         .replace('<pre class="shiki"', '<pre class="shiki shiki-dark"')
-      const light = highlightCode(code, lang || 'text', darkModeThemes.light, lineOptions)
+      const light = highlightCode(code, lang, darkModeThemes.light, lineOptions)
         .replace('<pre class="shiki"', '<pre class="shiki shiki-light"')
-      return `<div class="shiki-container">${dark}${light}</div>`
+      return `<div class="shiki-container language-${lang}">${dark}${light}</div>`
     }
     else {
       return highlightCode(
         code,
-        lang || 'text',
+        lang,
         undefined,
         lineOptions,
-      )
+      ).replace('<code>', `<code class="language-${lang}">`)
     }
   }
 }
