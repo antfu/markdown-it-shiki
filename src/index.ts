@@ -122,6 +122,7 @@ const MarkdownItShiki: MarkdownIt.PluginWithOptions<Options> = (markdownit, opti
         .replace('<pre class="shiki ', '<pre class="shiki shiki-dark ')
       const light = highlightCode(code, lang, darkModeThemes.light, lineOptions)
         .replace('<pre class="shiki ', '<pre class="shiki shiki-light ')
+      // The leading <pre hidden> prevents markdown-it from wrapping the output.
       return `<pre hidden></pre><div class="shiki-container language-${lang}">${dark}${light}</div>`
     }
     else {
