@@ -64,3 +64,39 @@ html:not(.dark) .shiki-dark {
 }
 ```
 
+### Highlight lines
+
+```js
+md.use(Shiki, {
+  highlightLines: true
+})
+```
+
+Add these to your CSS
+
+```css
+code[v-pre] { 
+  display: flex;
+  flex-direction: column;
+}
+
+.shiki .highlighted {
+  background: #7f7f7f20;
+  display: block;
+  margin: 0 -1rem;
+  padding: 0 1rem;
+}
+```
+
+Then you can highlight lines in code block.
+
+~~~
+```js {1-2}
+const md = new MarkdownIt()
+md.use(Shiki)
+
+const res = md.render(/** ... */)
+console.log(res)
+```
+~~~
+
