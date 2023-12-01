@@ -1,3 +1,9 @@
+# DEPRECATED
+
+This plugin is no longer maintained. We recommend using [Shikiji](https://github.com/antfu/shikiji) with [markdown-it-shikiji](https://github.com/antfu/shikiji/tree/main/packages/markdown-it-shikiji).
+
+----
+
 # markdown-it-shiki
 
 [Markdown It](https://markdown-it.github.io/) plugin for [Shiki](https://github.com/shikijs/shiki)
