@@ -1,6 +1,6 @@
 import type { Highlighter, HtmlRendererOptions, ILanguageRegistration, IThemeRegistration } from 'shiki'
 import { getHighlighter } from 'shiki'
-import { runAsWorker } from 'synckit'
+import { runAsWorker } from 'unasync'
 
 let h: Highlighter
 

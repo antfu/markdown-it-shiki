@@ -1,7 +1,7 @@
 import { createRequire } from 'node:module'
 import type { Highlighter, HtmlRendererOptions, ILanguageRegistration, IShikiTheme, IThemeRegistration } from 'shiki'
 import type MarkdownIt from 'markdown-it'
-import { createSyncFn } from 'synckit'
+import { createSyncFn } from 'unasync'
 
 export interface DarkModeThemes {
   dark: IThemeRegistration
